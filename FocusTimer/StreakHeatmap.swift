@@ -100,7 +100,8 @@ struct StreakHeatmapView: View {
         let today = Date()
         
         for weekOffset in stride(from: -52, to: 1, by: 1) {
-            if let weekStart = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], for: calendar.date(byAdding: .weekOfYear, value: weekOffset, to: today)!)) {
+            if let weekDate = calendar.date(byAdding: .weekOfYear, value: weekOffset, to: today),
+               let weekStart = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: weekDate)) {
                 weeks.append(weekStart)
             }
         }
@@ -203,7 +204,7 @@ struct SocialSharingCard: View {
             // Stats
             VStack(spacing: 16) {
                 HStack(spacing: 24) {
-                    ShareStatItem(value: "\(stats.totalHours)", label: "Hours Focused", icon: "clock.fill", color: .orange)
+                    ShareStatItem(value: "\(statsTotalHours)", label: "Hours Focused", icon: "clock.fill", color: .orange)
                     ShareStatItem(value: "\(stats.totalSessions)", label: "Sessions", icon: "checkmark.circle.fill", color: .green)
                 }
                 
