@@ -157,15 +157,16 @@ class TimerManager: ObservableObject {
             recordSession()
             
             // Check if stack queue has more sessions
-            if stackManager.isQueueMode, let currentItem = stackManager.currentItem {
+            if stackManager.isQueueMode, stackManager.currentItem != nil {
                 // Move to next in queue
                 stackManager.moveToNext()
                 if let nextItem = stackManager.currentItem {
-                    remainingSeconds = nextItem.duration * 60
-                    totalSecondsForPhase = nextItem.duration * 60
+                    let sessionDuration = getModeDuration(for: nextItem.mode)
+                    remainingSeconds = sessionDuration
+                    totalSecondsForPhase = sessionDuration
                     currentSessionLabel = nextItem.projectName
                     isWorkPhase = true
-                    soundManager.play(sound: .none) // Transition sound placeholder
+                    soundManager.play(sound: FocusSoundType.none) // Transition sound placeholder
                     onPhaseChange?(true)
                 }
             } else if currentSessionIndex >= sessionsBeforeLongBreak - 1 {
@@ -194,7 +195,7 @@ class TimerManager: ObservableObject {
             totalSecondsForPhase = workDuration
             isWorkPhase = true
             sessionStartTime = Date()
-            soundManager.play(sound: .none)
+            soundManager.play(sound: FocusSoundType.none)
             onPhaseChange?(true)
         }
         
@@ -211,11 +212,12 @@ class TimerManager: ObservableObject {
         // Create and record session
         let session = FocusSession(
             id: UUID(),
-            date: Date(),
+            startTime: sessionStartTime,
+            endTime: Date(),
             duration: actualMinutes,
-            mode: modeManager.currentMode?.type ?? .deepWork,
-            labelId: labelManager.currentLabel?.id,
-            completed: true
+            type: .work,
+            completed: true,
+            labelId: labelManager.selectedLabel?.id
         )
         dataManager.addSession(session)
         
@@ -299,5 +301,12 @@ class TimerManager: ObservableObject {
         } else {
             return "Session \(currentSessionIndex + 1)/\(sessionsBeforeLongBreak)"
         }
+    }
+    
+    private func getModeDuration(for mode: FocusModeType) -> Int {
+        if let focusMode = modeManager.modes.first(where: { $0.type == mode }) {
+            return focusMode.work
+        }
+        return workDuration
     }
 }
