@@ -34,7 +34,7 @@ class TimerManager: ObservableObject {
     private let dataManager = FocusDataManager.shared
     private let modeManager = FocusModeManager.shared
     private let stackManager = TimerStackManager.shared
-    private let soundManager = FocusSounds.shared
+    private let soundManager = FocusSoundManager.shared
     private let labelManager = SessionLabelManager.shared
     private let levelingSystem = LevelingSystem.shared
     private let coinManager = FocusCoinManager.shared
@@ -81,7 +81,7 @@ class TimerManager: ObservableObject {
             sessionStartTime = Date()
             
             // Load label if any
-            if let label = labelManager.currentLabel {
+            if let label = labelManager.selectedLabel {
                 currentSessionLabel = label.name
             }
         }
@@ -304,9 +304,6 @@ class TimerManager: ObservableObject {
     }
     
     private func getModeDuration(for mode: FocusModeType) -> Int {
-        if let focusMode = modeManager.modes.first(where: { $0.type == mode }) {
-            return focusMode.work
-        }
-        return workDuration
-    }
+        // Use FocusModeType computed property directly
+        return mode.workDuration
 }
