@@ -91,7 +91,7 @@ class DebriefManager: ObservableObject {
     
     func getThisWeekDebriefs() -> [DebriefEntry] {
         let calendar = Calendar.current
-        let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], for: Date()))!
+        let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))!
         
         return debriefHistory.filter { $0.date >= startOfWeek }
     }
@@ -496,7 +496,7 @@ class FocusConsistencyScore {
         let baseScore = Double(activeDays) / 30.0
         
         // Bonus for regular daily practice
-        let dayOfWeekCounts = [Int](repeating: 0, count: 7)
+        var dayOfWeekCounts = [Int](repeating: 0, count: 7)
         for day in sessionDays {
             let weekday = calendar.component(.weekday, from: day)
             dayOfWeekCounts[weekday - 1] += 1
