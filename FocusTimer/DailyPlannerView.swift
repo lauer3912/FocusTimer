@@ -337,7 +337,7 @@ struct PlanItemRow: View {
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color(hex: isActive ? "FF6B6B".opacity(0.15) : "2C2C2E"))
+                .fill(isActive ? Color(hex: "FF6B6B").opacity(0.15) : Color(hex: "2C2C2E"))
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
                         .stroke(isActive ? Color(hex: "FF6B6B").opacity(0.5) : Color.clear, lineWidth: 2)
