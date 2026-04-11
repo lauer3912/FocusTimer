@@ -46,6 +46,7 @@ enum InsightImportance {
     case low
     case medium
     case high
+}
 
 // MARK: - Focus Intelligence Engine
 
