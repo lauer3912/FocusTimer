@@ -32,6 +32,8 @@ struct ContentView: View {
     @State private var showProfile: Bool = false
     @State private var showShop: Bool = false
     @State private var showAchievements: Bool = false
+    @State private var showIntelligence: Bool = false
+    @State private var showProjectPicker: Bool = false
     
     var body: some View {
         ZStack {
@@ -95,6 +97,8 @@ struct ContentView: View {
         .sheet(isPresented: $showProfile) { ProfileView() }
         .sheet(isPresented: $showShop) { FocusShopView() }
         .sheet(isPresented: $showAchievements) { AchievementsView() }
+        .sheet(isPresented: $showIntelligence) { IntelligenceDashboardView() }
+        .sheet(isPresented: $showProjectPicker) { ProjectPickerView() }
         
         // Celebration overlay
         .overlay(
@@ -215,6 +219,18 @@ struct ContentView: View {
                 Image(systemName: "chart.bar.fill")
                     .font(.system(size: 20))
                     .foregroundColor(Color(hex: "8E8E93"))
+            }
+            
+            Button(action: { showIntelligence = true }) {
+                Image(systemName: "brain.head.profile")
+                    .font(.system(size: 20))
+                    .foregroundColor(Color(hex: "AF52DE"))
+            }
+            
+            Button(action: { showProjectPicker = true }) {
+                Image(systemName: "folder.fill")
+                    .font(.system(size: 20))
+                    .foregroundColor(Color(hex: "5AC8FA"))
             }
             
             Button(action: { showSettings = true }) {
@@ -1325,5 +1341,156 @@ struct AchievementBadgeRow: View {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMM d, yyyy"
         return formatter.string(from: date)
+    }
+}
+
+// MARK: - Project Picker View
+
+struct ProjectPickerView: View {
+    @StateObject private var projectManager = ProjectManager.shared
+    @Environment(\.dismiss) private var dismiss
+    
+    @State private var newProjectName: String = ""
+    @State private var selectedColor: String = "FF6B6B"
+    
+    private let colors = ["FF6B6B", "4ECB71", "5AC8FA", "AF52DE", "FF9500", "FFD60A", "64D2FF", "8E8E93"]
+    
+    var body: some View {
+        NavigationView {
+            ZStack {
+                Color(hex: "1C1C1E")
+                    .ignoresSafeArea()
+                
+                VStack(spacing: 20) {
+                    // Add new project
+                    VStack(spacing: 12) {
+                        TextField("Project Name", text: $newProjectName)
+                            .textFieldStyle(.plain)
+                            .padding(12)
+                            .background(Color(hex: "3A3A3C"))
+                            .cornerRadius(8)
+                            .foregroundColor(.white)
+                        
+                        HStack(spacing: 8) {
+                            ForEach(colors, id: \.self) { color in
+                                Circle()
+                                    .fill(Color(hex: color))
+                                    .frame(width: 30, height: 30)
+                                    .overlay(
+                                        Circle()
+                                            .stroke(selectedColor == color ? Color.white : Color.clear, lineWidth: 2)
+                                    )
+                                    .onTapGesture {
+                                        selectedColor = color
+                                    }
+                            }
+                        }
+                        
+                        Button(action: createProject) {
+                            Text("Create Project")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding(12)
+                                .background(Color(hex: "4ECB71"))
+                                .cornerRadius(8)
+                        }
+                        .disabled(newProjectName.isEmpty)
+                    }
+                    .padding()
+                    .background(Color(hex: "2C2C2E"))
+                    .cornerRadius(16)
+                    
+                    // Project list
+                    if projectManager.projects.isEmpty {
+                        VStack(spacing: 12) {
+                            Image(systemName: "folder")
+                                .font(.system(size: 48))
+                                .foregroundColor(Color(hex: "3A3A3C"))
+                            Text("No projects yet")
+                                .foregroundColor(Color(hex: "8E8E93"))
+                        }
+                        .padding(.vertical, 40)
+                    } else {
+                        ForEach(projectManager.projects.filter { !$0.isArchived }) { project in
+                            ProjectRow(
+                                project: project,
+                                isActive: projectManager.activeProjectId == project.id,
+                                onSelect: {
+                                    projectManager.setActiveProject(project)
+                                    dismiss()
+                                },
+                                onDelete: {
+                                    projectManager.deleteProject(project)
+                                }
+                            )
+                        }
+                    }
+                    
+                    Spacer()
+                }
+                .padding()
+            }
+            .navigationTitle("Projects")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") { dismiss() }
+                        .foregroundColor(Color(hex: "FF6B6B"))
+                }
+            }
+        }
+        .preferredColorScheme(.dark)
+    }
+    
+    private func createProject() {
+        _ = projectManager.createProject(name: newProjectName, color: selectedColor)
+        newProjectName = ""
+    }
+}
+
+struct ProjectRow: View {
+    let project: FocusProject
+    let isActive: Bool
+    let onSelect: () -> Void
+    let onDelete: () -> Void
+    
+    var body: some View {
+        Button(action: onSelect) {
+            HStack(spacing: 16) {
+                Circle()
+                    .fill(Color(hex: project.color))
+                    .frame(width: 12, height: 12)
+                
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(project.name)
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(.white)
+                    
+                    Text("\(project.sessions) sessions • \(project.formattedTime)")
+                        .font(.system(size: 12))
+                        .foregroundColor(Color(hex: "8E8E93"))
+                }
+                
+                Spacer()
+                
+                if isActive {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(Color(hex: "4ECB71"))
+                }
+                
+                Button(action: onDelete) {
+                    Image(systemName: "trash")
+                        .foregroundColor(Color(hex: "FF6B6B"))
+                }
+            }
+            .padding(16)
+            .background(isActive ? Color(hex: project.color).opacity(0.15) : Color(hex: "2C2C2E"))
+            .cornerRadius(12)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(isActive ? Color(hex: project.color).opacity(0.5) : Color.clear, lineWidth: 2)
+            )
+        }
     }
 }

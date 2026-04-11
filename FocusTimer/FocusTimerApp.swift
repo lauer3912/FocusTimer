@@ -19,6 +19,10 @@ struct FocusTimerApp: App {
         _ = FocusCoinManager.shared
         _ = CelebrationManager.shared
         _ = AchievementManager.shared
+        _ = FocusIntelligence.shared
+        _ = ProjectManager.shared
+        _ = AICoach.shared
+        _ = HealthIntegration.shared
         
         // Load saved data
         FocusModeManager.shared.load()
@@ -31,6 +35,12 @@ struct FocusTimerApp: App {
         FocusCoinManager.shared.load()
         CelebrationManager.shared.load()
         AchievementManager.shared.load()
+        FocusIntelligence.shared.load()
+        ProjectManager.shared.load()
+        AICoach.shared.load()
+        
+        // Initial analysis
+        FocusIntelligence.shared.analyze()
     }
     
     var body: some Scene {
