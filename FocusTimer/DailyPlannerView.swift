@@ -249,10 +249,12 @@ struct DailyPlannerView: View {
     }
     
     private func startCurrentSession() {
-        // Apply the mode and start timer
+        // Apply the mode
         if let current = planner.currentItem {
             modeManager.applyMode(current.modeType)
         }
+        // Dismiss the planner and let user start manually
+        dismiss()
     }
 }
 
