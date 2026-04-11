@@ -53,14 +53,12 @@ class TimerManager: ObservableObject {
     }
     
     func loadSettings() {
-        let mode = modeManager.currentMode ?? modeManager.modes.first
-        if let mode = mode {
-            workDuration = mode.work
-            breakDuration = mode.breakLength
-            longBreakDuration = mode.longBreak
-            sessionsBeforeLongBreak = mode.sessionsBeforeLongBreak
-            currentModeName = mode.name
-        }
+        let mode = modeManager.currentMode
+        workDuration = mode.workDuration
+        breakDuration = mode.shortBreakDuration
+        longBreakDuration = mode.longBreakDuration
+        sessionsBeforeLongBreak = mode.sessionsUntilLongBreak
+        currentModeName = mode.displayName
         remainingSeconds = workDuration
         totalSecondsForPhase = workDuration
     }
