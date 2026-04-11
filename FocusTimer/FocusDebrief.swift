@@ -3,14 +3,11 @@
 //  FocusTimer
 //
 //  F97: Focus Debrief - End-of-day reflection
-import Foundation
-import Combine
-import SwiftUI
 //  F41: Monthly Focus Calendar Export
-//
 
 import Foundation
 import Combine
+import SwiftUI
 import PDFKit
 
 // MARK: - Debrief Entry

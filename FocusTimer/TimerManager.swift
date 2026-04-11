@@ -43,10 +43,10 @@ class TimerManager: ObservableObject {
     private let projectManager = ProjectManager.shared
     private let dailyChallenge = DailyChallengeManager.shared
     
-    // MARK: - Callbacks for UI updates
-    var onTimerUpdate: (() -> Void)?
-    var onPhaseChange: ((Bool) -> Void)?
-    var onSessionComplete: (() -> Void)?
+    // MARK: - Callbacks for UI updates (weak to avoid retain cycles)
+    weak var onTimerUpdate: (() -> Void)?
+    weak var onPhaseChange: ((Bool) -> Void)?
+    weak var onSessionComplete: (() -> Void)?
     
     private init() {
         loadSettings()

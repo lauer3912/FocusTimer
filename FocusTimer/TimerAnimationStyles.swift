@@ -3,11 +3,9 @@
 //  FocusTimer
 //
 //  F48: Multiple timer animation styles - circular, pixel, minimal, zen garden
+
 import Foundation
 import Combine
-import SwiftUI
-//
-
 import SwiftUI
 
 // MARK: - Timer Animation Style

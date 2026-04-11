@@ -16,6 +16,7 @@ struct FocusActivityAttributes: ActivityAttributes {
         var sessionName: String
         var totalSessions: Int
         var completedSessions: Int
+        var totalDuration: Int // Total session duration in seconds
     }
     
     var startTime: Date
@@ -40,7 +41,7 @@ class LiveActivityManager: ObservableObject {
         currentActivity != nil
     }
     
-    func startActivity(modeName: String, totalSessions: Int, initialTime: Int = 25 * 60) {
+    func startActivity(modeName: String, totalSessions: Int, initialTime: Int = 25 * 60, totalDuration: Int = 25 * 60) {
         guard ActivityAuthorizationInfo().areActivitiesEnabled else {
             print("Live Activities not enabled")
             return
@@ -59,7 +60,8 @@ class LiveActivityManager: ObservableObject {
             timeRemaining: initialTime,
             sessionName: "Focus Session",
             totalSessions: totalSessions,
-            completedSessions: 0
+            completedSessions: 0,
+            totalDuration: totalDuration
         )
         
         do {
@@ -136,7 +138,7 @@ struct FocusLiveActivityView: View {
                     .frame(width: 50, height: 50)
                 
                 Circle()
-                    .trim(from: 0, to: CGFloat(state.timeRemaining) / (25 * 60))
+                    .trim(from: 0, to: CGFloat(state.timeRemaining) / max(CGFloat(state.totalDuration), 1))
                     .stroke(
                         state.isWorkPhase ? Color.red : Color.green,
                         style: StrokeStyle(lineWidth: 4, lineCap: .round)

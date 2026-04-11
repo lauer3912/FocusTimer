@@ -3,16 +3,13 @@
 //  FocusTimer
 //
 //  F63: Screen-Free Break Mode
-import Foundation
-import Combine
-import SwiftUI
 //  F66: Mental Load Manager
 //  F57: Eye Care Reminders (20-20-20)
 //  F56: Posture Break Alerts
-//
 
 import Foundation
 import Combine
+import SwiftUI
 import UserNotifications
 
 // MARK: - Mental Load Entry

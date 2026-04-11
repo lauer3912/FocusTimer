@@ -3,11 +3,9 @@
 //  FocusTimer
 //
 //  Pre-session mood and energy picker
+
 import Foundation
 import Combine
-import SwiftUI
-//
-
 import SwiftUI
 
 struct MoodPickerView: View {

@@ -3,13 +3,10 @@
 //  FocusTimer
 //
 //  F53: Mood + Energy Logging before sessions
-import Foundation
-import Combine
-import SwiftUI
-//
 
 import Foundation
 import Combine
+import SwiftUI
 
 // MARK: - Mood & Energy Models
 
