@@ -133,8 +133,8 @@ struct DurationSettingRow: View {
             
             HStack(spacing: 12) {
                 Button(action: {
-                    if value > range.lowerBound {
-                        value -= 5
+                    if value > range.lowerBound * 60 {
+                        value -= 60
                     }
                 }) {
                     Image(systemName: "minus.circle.fill")
@@ -142,14 +142,14 @@ struct DurationSettingRow: View {
                         .foregroundColor(Color(hex: "8E8E93"))
                 }
                 
-                Text("\(value)")
+                Text("\(value / 60)")
                     .font(.system(size: 18, weight: .semibold, design: .monospaced))
                     .foregroundColor(.white)
                     .frame(minWidth: 40)
                 
                 Button(action: {
-                    if value < range.upperBound {
-                        value += 5
+                    if value < range.upperBound * 60 {
+                        value += 60
                     }
                 }) {
                     Image(systemName: "plus.circle.fill")

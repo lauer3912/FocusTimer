@@ -34,6 +34,8 @@ struct ContentView: View {
     @State private var showAchievements: Bool = false
     @State private var showIntelligence: Bool = false
     @State private var showProjectPicker: Bool = false
+    @State private var showDailyPlanner: Bool = false
+    @State private var showRollingPomodoro: Bool = false
     
     var body: some View {
         ZStack {
@@ -99,6 +101,8 @@ struct ContentView: View {
         .sheet(isPresented: $showAchievements) { AchievementsView() }
         .sheet(isPresented: $showIntelligence) { IntelligenceDashboardView() }
         .sheet(isPresented: $showProjectPicker) { ProjectPickerView() }
+        .sheet(isPresented: $showDailyPlanner) { DailyPlannerView() }
+        .sheet(isPresented: $showRollingPomodoro) { RollingPomodoroView() }
         
         // Celebration overlay
         .overlay(
@@ -337,7 +341,7 @@ struct ContentView: View {
                     style: StrokeStyle(lineWidth: 12, lineCap: .round)
                 )
                 .rotationEffect(.degrees(-90))
-                .animation(.linear(duration: 1), value: progress)
+                .animation(nil, value: progress)
             
             VStack(spacing: 8) {
                 Text(timeString)
@@ -446,6 +450,28 @@ struct ContentView: View {
                     Image(systemName: "bolt.fill")
                         .font(.system(size: 20))
                     Text("Quick")
+                        .font(.system(size: 10))
+                }
+                .foregroundColor(Color(hex: "8E8E93"))
+            }
+            
+            // Daily Planner
+            Button(action: { showDailyPlanner = true }) {
+                VStack(spacing: 4) {
+                    Image(systemName: "calendar.badge.clock")
+                        .font(.system(size: 20))
+                    Text("Plan")
+                        .font(.system(size: 10))
+                }
+                .foregroundColor(Color(hex: "8E8E93"))
+            }
+            
+            // Rolling Pomodoro
+            Button(action: { showRollingPomodoro = true }) {
+                VStack(spacing: 4) {
+                    Image(systemName: "infinity")
+                        .font(.system(size: 20))
+                    Text("Rolling")
                         .font(.system(size: 10))
                 }
                 .foregroundColor(Color(hex: "8E8E93"))
