@@ -34,13 +34,14 @@ class TimerManager: ObservableObject {
     private let dataManager = FocusDataManager.shared
     private let modeManager = FocusModeManager.shared
     private let stackManager = TimerStackManager.shared
-    private let challengeManager = DailyChallengeManager.shared
-    private let soundManager = FocusSoundManager.shared
-    private let achievementManager = AchievementManager.shared
+    private let soundManager = FocusSounds.shared
+    private let labelManager = SessionLabelManager.shared
     private let levelingSystem = LevelingSystem.shared
     private let coinManager = FocusCoinManager.shared
     private let celebrationManager = CelebrationManager.shared
+    private let achievementManager = AchievementManager.shared
     private let projectManager = ProjectManager.shared
+    private let dailyChallenge = DailyChallengeManager.shared
     
     // MARK: - Callbacks for UI updates
     var onTimerUpdate: (() -> Void)?
@@ -70,7 +71,7 @@ class TimerManager: ObservableObject {
         guard !isRunning else { return }
         
         if isPaused {
-            // Resume
+            // Resume from pause
             isPaused = false
         } else {
             // Fresh start
@@ -80,7 +81,7 @@ class TimerManager: ObservableObject {
             sessionStartTime = Date()
             
             // Load label if any
-            if let label = SessionLabelManager.shared.currentLabel {
+            if let label = labelManager.currentLabel {
                 currentSessionLabel = label.name
             }
         }
@@ -106,6 +107,7 @@ class TimerManager: ObservableObject {
     }
     
     func resetTimer() {
+        loadSettings()
         remainingSeconds = workDuration
         totalSecondsForPhase = workDuration
         isWorkPhase = true
@@ -151,33 +153,35 @@ class TimerManager: ObservableObject {
         let wasWorkPhase = isWorkPhase
         
         if wasWorkPhase {
-            // Work phase ended
+            // Work phase ended - record session
             recordSession()
             
-            // Check if stack has more sessions
-            if stackManager.isQueueMode && currentSessionIndex < stackManager.currentQueue.count - 1 {
-                currentSessionIndex += 1
-                let nextItem = stackManager.currentQueue[currentSessionIndex]
-                remainingSeconds = nextItem.duration * 60
-                totalSecondsForPhase = nextItem.duration * 60
-                currentSessionLabel = nextItem.label
-                isWorkPhase = true
-                soundManager.playTransitionSound()
-                onPhaseChange?(true)
+            // Check if stack queue has more sessions
+            if stackManager.isQueueMode, let currentItem = stackManager.currentItem {
+                // Move to next in queue
+                stackManager.moveToNext()
+                if let nextItem = stackManager.currentItem {
+                    remainingSeconds = nextItem.duration * 60
+                    totalSecondsForPhase = nextItem.duration * 60
+                    currentSessionLabel = nextItem.projectName
+                    isWorkPhase = true
+                    soundManager.play(sound: .none) // Transition sound placeholder
+                    onPhaseChange?(true)
+                }
             } else if currentSessionIndex >= sessionsBeforeLongBreak - 1 {
                 // Long break
                 remainingSeconds = longBreakDuration
                 totalSecondsForPhase = longBreakDuration
                 isWorkPhase = false
                 currentSessionIndex = 0
-                soundManager.playBreakEndSound()
+                soundManager.stop()
                 onPhaseChange?(false)
             } else {
                 // Regular break
                 remainingSeconds = breakDuration
                 totalSecondsForPhase = breakDuration
                 isWorkPhase = false
-                soundManager.playBreakEndSound()
+                soundManager.stop()
                 onPhaseChange?(false)
             }
         } else {
@@ -190,7 +194,7 @@ class TimerManager: ObservableObject {
             totalSecondsForPhase = workDuration
             isWorkPhase = true
             sessionStartTime = Date()
-            soundManager.playWorkStartSound()
+            soundManager.play(sound: .none)
             onPhaseChange?(true)
         }
         
@@ -202,35 +206,51 @@ class TimerManager: ObservableObject {
         guard isWorkPhase else { return }
         
         let minutes = workDuration / 60
-        let actualMinutes = Int(Date().timeIntervalSince(sessionStartTime) / 60)
+        let actualMinutes = max(1, Int(Date().timeIntervalSince(sessionStartTime) / 60))
         
-        // Update data manager
-        dataManager.recordSession(
+        // Create and record session
+        let session = FocusSession(
+            id: UUID(),
+            date: Date(),
             duration: actualMinutes,
-            label: currentSessionLabel.isEmpty ? nil : currentSessionLabel,
-            mode: currentModeName
+            mode: modeManager.currentMode?.type ?? .deepWork,
+            labelId: labelManager.currentLabel?.id,
+            completed: true
+        )
+        dataManager.addSession(session)
+        
+        // Update daily challenge
+        dailyChallenge.updateProgress(
+            sessionsCompleted: dataManager.statistics.todaySessions,
+            minutesCompleted: actualMinutes,
+            streakMaintained: dataManager.statistics.currentStreak > 0
         )
         
-        // Update challenge
-        challengeManager.recordCompletedSession(mode: currentModeName)
+        // Update XP
+        let xpEarned = levelingSystem.addXP(actualMinutes * 10)
         
-        // Update XP and coins
-        let xpEarned = levelingSystem.addXP(xp: actualMinutes * 10)
-        let coinsEarned = coinManager.addCoins(amount: actualMinutes)
+        // Award coins
+        coinManager.earnCoins(actualMinutes, reason: "Session completed")
         
         // Check achievements
-        achievementManager.checkAndUnlock(sessionCount: dataManager.statistics.totalSessions)
+        achievementManager.checkAndUnlockAchievements(
+            stats: dataManager.statistics,
+            extra: ["todayMinutes": actualMinutes]
+        )
         
         // Update project if active
-        if let project = projectManager.activeProject {
-            projectManager.addTimeToProject(minutes: actualMinutes)
+        if projectManager.activeProject != nil {
+            projectManager.logSession(minutes: actualMinutes)
         }
         
-        // Play celebration
-        celebrationManager.checkAndCelebrate(
-            sessions: dataManager.statistics.todaySessions,
-            streak: dataManager.statistics.currentStreak,
-            totalSessions: dataManager.statistics.totalSessions
+        // Check milestones
+        celebrationManager.onSessionCompleted()
+        if dataManager.statistics.todaySessions >= dataManager.settings.dailyGoal {
+            celebrationManager.onDailyGoalAchieved()
+        }
+        celebrationManager.checkMilestones(
+            stats: dataManager.statistics,
+            level: levelingSystem.currentLevel
         )
     }
     
@@ -239,7 +259,7 @@ class TimerManager: ObservableObject {
         
         if wasWorkPhase {
             content.title = "Focus Session Complete! 🎉"
-            content.body = "Great work! Time for a \(isWorkPhase ? "break" : "break")."
+            content.body = isWorkPhase ? "Break time!" : "Ready to focus again?"
             content.sound = .default
         } else {
             content.title = "Break Over"
@@ -275,7 +295,7 @@ class TimerManager: ObservableObject {
     
     var sessionInfo: String {
         if stackManager.isQueueMode {
-            return "Session \(currentSessionIndex + 1)/\(stackManager.currentQueue.count)"
+            return "Session \(currentSessionIndex + 1)/\(stackManager.totalSessionsInQueue)"
         } else {
             return "Session \(currentSessionIndex + 1)/\(sessionsBeforeLongBreak)"
         }
