@@ -29,6 +29,10 @@ struct FocusTimerApp: App {
         _ = TimerManager.shared
         _ = DailyPlanner.shared
         _ = RollingPomodoroManager.shared
+        _ = MoodEnergyManager.shared
+        _ = WellnessManager.shared
+        _ = DebriefManager.shared
+        _ = TimerStyleManager.shared
         
         // Load saved data
         FocusModeManager.shared.load()
