@@ -144,7 +144,7 @@ struct DailyPlannerView: View {
                 
                 Spacer()
                 
-                CircularProgressView(progress: planner.progress, size: 60)
+                PlannerCircularProgress(progress: planner.progress, size: 60)
             }
             
             // Progress bar
@@ -524,7 +524,7 @@ struct ModeChip: View {
 
 // MARK: - Circular Progress View
 
-struct CircularProgressView: View {
+struct PlannerCircularProgress: View {
     let progress: Double
     let size: CGFloat
     
