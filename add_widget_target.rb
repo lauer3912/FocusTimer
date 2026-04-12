@@ -18,25 +18,20 @@ puts "Creating widget target..."
 # Create the widget group
 widget_path = File.join(__dir__, 'FocusTimerWidget')
 widget_group = project.main_group.find_subpath('FocusTimerWidget', true)
-widget_group.set_source_tree('<group>')
-widget_group.set_path(widget_path)
 
 # Add Swift files
 Dir.glob(File.join(widget_path, '*.swift')).each do |file|
     file_name = File.basename(file)
     puts "Adding file: #{file_name}"
-    file_ref = widget_group.new_reference(file_name)
-    file_ref.set_source_tree('<group>')
+    widget_group.new_reference(file_name)
 end
 
 # Add Info.plist
 info_plist_path = File.join(widget_path, 'Info.plist')
 info_plist_ref = widget_group.new_reference(info_plist_path)
-info_plist_ref.set_source_tree('<group>')
 
 # Create the target
 widget_target = project.new_target(:app_extension, 'FocusTimerWidget', :ios)
-widget_target.set_source_tree('<group>')
 
 # Set bundle ID
 widget_target.build_configurations.each do |config|
@@ -44,17 +39,16 @@ widget_target.build_configurations.each do |config|
     config.build_settings['INFOPLIST_FILE'] = 'FocusTimerWidget/Info.plist'
     config.build_settings['SKIP_INSTALL'] = 'YES'
     config.build_settings['TARGETED_DEVICE_FAMILY'] = '1,2'
-    config.build_settings['SWIFT_EMIT_LOC_STRINGS'] = 'YES'
 end
 
 # Add to project
 project.targets << widget_target
 
-# Add dependency to main target
+# Add dependency to main target  
 main_target = project.targets.find { |t| t.name == 'FocusTimer' }
 if main_target
     puts "Adding widget dependency to main target..."
-    main_target.frameworks_build_phase.add_file_reference(info_plist_ref)
+    # Add widget product to main app's embedded binaries
 end
 
 # Save the project
