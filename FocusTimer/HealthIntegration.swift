@@ -90,9 +90,46 @@ class HealthIntegration: ObservableObject {
         healthStore.execute(query)
     }
     
-    func logFocusMinutesToHealth(_ minutes: Int) {
-        // This would log focus activity to Apple Health
-        // Implementation depends on HealthKit permissions
+    func logFocusMinutesToHealth(_ minutes: Int, date: Date = Date()) {
+        guard isAuthorized else { return }
+        
+        // Log focus session as a Mindful Session workout
+        let workout = HKWorkout(
+            activityType: .mindAndBody,
+            start: date,
+            end: date.addingTimeInterval(TimeInterval(minutes * 60)),
+            workoutEvents: nil,
+            totalEnergyBurned: nil,
+            totalDistance: nil,
+            metadata: [
+                HKMetadataKeyWorkoutBrandName: "FocusTimer",
+                "FocusMinutes": minutes
+            ]
+        )
+        
+        healthStore.save(workout) { success, error in
+            if let error = error {
+                print("Failed to save focus to HealthKit: \(error.localizedDescription)")
+            } else if success {
+                print("Successfully logged \(minutes) minutes of focus to HealthKit")
+            }
+        }
+        
+        // Also add mindful minutes if Mindful Session is available
+        if let mindfulType = HKCategoryType.categoryType(forIdentifier: .mindfulSession) {
+            let mindfulSample = HKCategorySample(
+                type: mindfulType,
+                value: HKCategoryValue.notApplicable.rawValue,
+                start: date,
+                end: date.addingTimeInterval(TimeInterval(minutes * 60))
+            )
+            
+            healthStore.save(mindfulSample) { success, error in
+                if success {
+                    print("Logged \(minutes) mindful minutes")
+                }
+            }
+        }
     }
     
     func analyzeCorrelation() -> Double {

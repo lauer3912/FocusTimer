@@ -48,6 +48,14 @@ struct FocusSettings: Codable {
     var soundEnabled: Bool = true
     var notificationEnabled: Bool = true
     
+    // Reminder settings
+    var reminderEnabled: Bool = false
+    var morningReminderTime: Date? = nil  // e.g., 9:00 AM
+    var eveningReminderTime: Date? = nil   // e.g., 8:00 PM
+    var reminderDays: [Int] = [1, 2, 3, 4, 5] // Mon-Fri default
+    var autoStartBreaks: Bool = false
+    var autoStartWork: Bool = false
+    
     static var `default`: FocusSettings { FocusSettings() }
 }
 
