@@ -6,6 +6,7 @@
 import Foundation
 import Combine
 import AVFoundation
+import AudioToolbox
 
 // MARK: - Sound Type
 
@@ -118,15 +119,87 @@ class FocusSoundManager: ObservableObject {
     }
     
     private func playSystemSound() {
-        // In a real implementation, this would play ambient audio files
-        // For now, we'll use a placeholder approach
-        // The app would include bundled audio files for rain, forest, etc.
+        // Play notification sound for non-noise ambient sounds
+        // In production, you would load actual audio files from bundle
+        // For now, use system sound as placeholder
+        AudioServicesPlaySystemSound(1007) // Default notification sound
     }
     
     private func generateNoise(type: FocusSoundType) {
-        // Noise generation would be implemented here
-        // White, brown, and pink noise can be generated programmatically
-        // This is a simplified placeholder
+        noiseGenerator?.stop()
+        noiseGenerator = nil
+        noiseNode = nil
+        
+        let engine = AVAudioEngine()
+        let sampleRate: Double = 44100
+        let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 1)!
+        
+        // Noise state variables
+        var b0: Float = 0, b1: Float = 0, b2: Float = 0, b3: Float = 0, b4: Float = 0, b5: Float = 0, b6: Float = 0
+        var pinkState: [Float] = [0, 0, 0, 0, 0, 0, 0]
+        
+        let node = AVAudioSourceNode { [weak self] _, _, frameCount, audioBufferList -> OSStatus in
+            guard let self = self else { return noErr }
+            
+            let ablPointer = UnsafeMutableAudioBufferListPointer(audioBufferList)
+            let buffer = ablPointer[0]
+            let ptr = buffer.mData!.assumingMemoryBound(to: Float.self)
+            
+            for frame in 0..<Int(frameCount) {
+                var sample: Float = 0
+                
+                switch type {
+                case .whiteNoise:
+                    // Pure random white noise
+                    sample = Float.random(in: -1...1) * self.volume
+                    
+                case .brownNoise:
+                    // Brown noise (random walk, deeper than pink)
+                    let white = Float.random(in: -1...1)
+                    b0 = 0.99886 * b0 + white * 0.0555179
+                    b1 = 0.99332 * b1 + white * 0.0750759
+                    b2 = 0.96900 * b2 + white * 0.1538520
+                    b3 = 0.86650 * b3 + white * 0.3104856
+                    b4 = 0.55000 * b4 + white * 0.5329522
+                    b5 = -0.7616 * b5 - white * 0.0168980
+                    sample = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.11
+                    b6 = white * 0.115926
+                    sample *= self.volume
+                    
+                case .pinkNoise:
+                    // Pink noise (1/f noise, between white and brown)
+                    let white = Float.random(in: -1...1)
+                    pinkState[0] = 0.99886 * pinkState[0] + white * 0.0555179
+                    pinkState[1] = 0.99332 * pinkState[1] + white * 0.0750759
+                    pinkState[2] = 0.96900 * pinkState[2] + white * 0.1538520
+                    pinkState[3] = 0.86650 * pinkState[3] + white * 0.3104856
+                    pinkState[4] = 0.55000 * pinkState[4] + white * 0.5329522
+                    pinkState[5] = -0.7616 * pinkState[5] - white * 0.0168980
+                    let pink = (pinkState[0] + pinkState[1] + pinkState[2] + pinkState[3] + pinkState[4] + pinkState[5] + pinkState[6] + white * 0.5362) * 0.11
+                    pinkState[6] = white * 0.115926
+                    sample = pink * self.volume
+                    
+                default:
+                    sample = 0
+                }
+                
+                ptr[frame] = sample
+            }
+            
+            return noErr
+        }
+        
+        noiseGenerator = engine
+        noiseNode = node
+        
+        engine.attach(node)
+        engine.connect(node, to: engine.mainMixerNode, format: format)
+        
+        do {
+            try engine.start()
+        } catch {
+            print("Failed to start noise generator: \(error)")
+        }
     }
     
     func save() {
