@@ -2,7 +2,7 @@ name: FocusTimer
 options:
   bundleIdPrefix: com.ggsheng
   deploymentTarget:
-    iOS: "26.2"
+    iOS: "17.0"
   xcodeVersion: "15.0"
   generateEmptyDirectories: true
 
