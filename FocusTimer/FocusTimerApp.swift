@@ -53,6 +53,9 @@ struct FocusTimerApp: App {
         
         // Initial analysis
         FocusIntelligence.shared.analyze()
+        
+        // Sync widget data
+        WidgetDataManager.shared.syncFromManagers()
     }
     
     var body: some Scene {

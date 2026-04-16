@@ -177,6 +177,9 @@ class FocusDataManager: ObservableObject {
         sessions.append(session)
         saveSessions()
         updateStatistics()
+        
+        // Sync widget data
+        WidgetDataManager.shared.syncFromManagers()
     }
     
     func getTodaySessions() -> [FocusSession] {

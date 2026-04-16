@@ -25,7 +25,7 @@ struct FocusTimerWidget: Widget {
         }
         .configurationDisplayName("Focus Timer")
         .description("Track your focus sessions at a glance.")
-        .supportedFamilies([.systemSmall, .systemMedium])
+        .supportedFamilies([.systemSmall, .systemMedium, .accessoryCircular, .accessoryRectangular, .accessoryInline])
     }
 }
 
@@ -33,17 +33,30 @@ struct FocusTimerWidget: Widget {
 
 struct FocusTimerProvider: TimelineProvider {
     func placeholder(in context: Context) -> FocusTimerEntry {
-        FocusTimerEntry(date: Date(), sessionsToday: 4, streakDays: 7, focusScore: 85)
+        FocusTimerEntry(
+            date: Date(),
+            focusData: WidgetFocusData.defaultData,
+            timerState: WidgetTimerState.defaultState
+        )
     }
     
     func getSnapshot(in context: Context, completion: @escaping (FocusTimerEntry) -> Void) {
-        let entry = FocusTimerEntry(date: Date(), sessionsToday: 4, streakDays: 7, focusScore: 85)
+        let focusData = WidgetDataManager.getFocusData()
+        let timerState = WidgetDataManager.getTimerState()
+        let entry = FocusTimerEntry(date: Date(), focusData: focusData, timerState: timerState)
         completion(entry)
     }
     
     func getTimeline(in context: Context, completion: @escaping (Timeline<FocusTimerEntry>) -> Void) {
-        let entry = FocusTimerEntry(date: Date(), sessionsToday: 4, streakDays: 7, focusScore: 85)
-        let nextUpdate = Calendar.current.date(byAdding: .minute, value: 15, to: Date())!
+        let focusData = WidgetDataManager.getFocusData()
+        let timerState = WidgetDataManager.getTimerState()
+        
+        let entry = FocusTimerEntry(date: Date(), focusData: focusData, timerState: timerState)
+        
+        // Update every minute if timer is running, otherwise every 15 minutes
+        let interval: TimeInterval = timerState.isRunning ? 60 : 900
+        let nextUpdate = Calendar.current.date(byAdding: .second, value: Int(interval), to: Date())!
+        
         let timeline = Timeline(entries: [entry], policy: .after(nextUpdate))
         completion(timeline)
     }
@@ -53,9 +66,8 @@ struct FocusTimerProvider: TimelineProvider {
 
 struct FocusTimerEntry: TimelineEntry {
     let date: Date
-    let sessionsToday: Int
-    let streakDays: Int
-    let focusScore: Int
+    let focusData: WidgetFocusData
+    let timerState: WidgetTimerState
 }
 
 // MARK: - Widget View
@@ -71,99 +83,262 @@ struct FocusTimerWidgetEntryView: View {
             smallWidget
         case .systemMedium:
             mediumWidget
+        case .accessoryCircular:
+            circularWidget
+        case .accessoryRectangular:
+            rectangularWidget
+        case .accessoryInline:
+            inlineWidget
         default:
             smallWidget
         }
     }
     
+    // MARK: - Small Widget
+    
     var smallWidget: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 6) {
             HStack {
                 Image(systemName: "timer")
                     .foregroundColor(.red)
+                    .font(.caption)
                 Text("FocusTimer")
                     .font(.caption)
                     .fontWeight(.semibold)
+                    .foregroundColor(.primary)
             }
             
             Spacer()
             
-            Text("\(entry.sessionsToday)")
-                .font(.system(size: 36, weight: .bold, design: .rounded))
-                .foregroundColor(.white)
-            
-            Text("sessions today")
-                .font(.caption2)
-                .foregroundColor(.gray)
-            
-            HStack {
-                Image(systemName: "flame.fill")
-                    .foregroundColor(.orange)
-                    .font(.caption)
-                Text("\(entry.streakDays) day streak")
+            if entry.timerState.isRunning {
+                // Timer running - show timer
+                Text(entry.timerState.formattedTime)
+                    .font(.system(size: 32, weight: .bold, design: .monospaced))
+                    .foregroundColor(.primary)
+                
+                Text(entry.timerState.modeName)
                     .font(.caption2)
-                    .foregroundColor(.gray)
+                    .foregroundColor(.secondary)
+            } else {
+                // Show stats
+                Text("\(entry.focusData.sessionsToday)")
+                    .font(.system(size: 36, weight: .bold, design: .rounded))
+                    .foregroundColor(.primary)
+                
+                Text("sessions today")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
+            
+            Spacer()
+            
+            HStack(spacing: 8) {
+                if entry.timerState.isRunning {
+                    Image(systemName: "flame.fill")
+                        .foregroundColor(.orange)
+                        .font(.caption2)
+                    Text("In Progress")
+                        .font(.caption2)
+                        .foregroundColor(.orange)
+                } else {
+                    Image(systemName: "flame.fill")
+                        .foregroundColor(.orange)
+                        .font(.caption2)
+                    Text("\(entry.focusData.streakDays) day streak")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
             }
         }
         .padding()
-        .containerBackground(.black, for: .widget)
+        .containerBackground(.fill.tertiary, for: .widget)
     }
     
+    // MARK: - Medium Widget
+    
     var mediumWidget: some View {
-        HStack(spacing: 20) {
-            VStack(alignment: .leading, spacing: 8) {
+        HStack(spacing: 16) {
+            // Left side - Timer or main stat
+            VStack(alignment: .leading, spacing: 6) {
                 HStack {
                     Image(systemName: "timer")
                         .foregroundColor(.red)
+                        .font(.caption)
                     Text("FocusTimer")
                         .font(.caption)
                         .fontWeight(.semibold)
+                        .foregroundColor(.primary)
                 }
                 
                 Spacer()
                 
-                Text("\(entry.sessionsToday)")
-                    .font(.system(size: 44, weight: .bold, design: .rounded))
-                    .foregroundColor(.white)
+                if entry.timerState.isRunning {
+                    Text(entry.timerState.formattedTime)
+                        .font(.system(size: 40, weight: .bold, design: .monospaced))
+                        .foregroundColor(.primary)
+                    
+                    Text(entry.timerState.modeName)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    Text(entry.timerState.projectName)
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                } else {
+                    Text("\(entry.focusData.sessionsToday)")
+                        .font(.system(size: 44, weight: .bold, design: .rounded))
+                        .foregroundColor(.primary)
+                    
+                    Text("sessions today")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    
+                    Text(entry.focusData.formattedFocusTime + " focused")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
                 
-                Text("sessions today")
-                    .font(.caption2)
-                    .foregroundColor(.gray)
+                Spacer()
             }
             
             Divider()
-                .background(Color.gray)
             
-            VStack(alignment: .leading, spacing: 12) {
-                HStack {
-                    Image(systemName: "flame.fill")
-                        .foregroundColor(.orange)
-                    Text("\(entry.streakDays) days")
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                }
+            // Right side - Stats
+            VStack(alignment: .leading, spacing: 10) {
+                StatRow(
+                    icon: "flame.fill",
+                    iconColor: .orange,
+                    title: "\(entry.focusData.streakDays) days",
+                    subtitle: "streak"
+                )
                 
-                HStack {
-                    Image(systemName: "star.fill")
-                        .foregroundColor(.yellow)
-                    Text("\(entry.focusScore)%")
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                }
+                StatRow(
+                    icon: "star.fill",
+                    iconColor: .yellow,
+                    title: "\(entry.focusData.focusScore)%",
+                    subtitle: "focus score"
+                )
                 
-                HStack {
-                    Image(systemName: "clock.fill")
-                        .foregroundColor(.blue)
-                    Text("2h 15m")
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                }
+                StatRow(
+                    icon: "clock.fill",
+                    iconColor: .blue,
+                    title: entry.focusData.formattedFocusTime,
+                    subtitle: "today"
+                )
+                
+                StatRow(
+                    icon: "trophy.fill",
+                    iconColor: .purple,
+                    title: "\(entry.focusData.achievementsUnlocked)/\(entry.focusData.totalAchievements)",
+                    subtitle: "achievements"
+                )
             }
             
             Spacer()
         }
         .padding()
-        .containerBackground(.black, for: .widget)
+        .containerBackground(.fill.tertiary, for: .widget)
+    }
+    
+    // MARK: - Circular Widget (Lock Screen)
+    
+    var circularWidget: some View {
+        ZStack {
+            AccessoryWidgetBackground()
+            
+            VStack(spacing: 2) {
+                if entry.timerState.isRunning {
+                    Text(entry.timerState.formattedTime)
+                        .font(.system(size: 14, weight: .bold, design: .monospaced))
+                    Image(systemName: "timer")
+                        .font(.caption2)
+                } else {
+                    Text("\(entry.focusData.sessionsToday)")
+                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                    Text("sessions")
+                        .font(.system(size: 8))
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+    }
+    
+    // MARK: - Rectangular Widget (Lock Screen)
+    
+    var rectangularWidget: some View {
+        HStack(spacing: 8) {
+            VStack(alignment: .leading, spacing: 2) {
+                HStack(spacing: 4) {
+                    Image(systemName: "timer")
+                        .font(.caption2)
+                    Text("FocusTimer")
+                        .font(.caption2)
+                        .fontWeight(.semibold)
+                }
+                
+                if entry.timerState.isRunning {
+                    Text(entry.timerState.formattedTime)
+                        .font(.system(size: 16, weight: .bold, design: .monospaced))
+                    Text(entry.timerState.modeName)
+                        .font(.system(size: 10))
+                        .foregroundColor(.secondary)
+                } else {
+                    Text("\(entry.focusData.sessionsToday) sessions")
+                        .font(.system(size: 14, weight: .semibold))
+                    Text(entry.focusData.formattedFocusTime + " today")
+                        .font(.system(size: 10))
+                        .foregroundColor(.secondary)
+                }
+            }
+            
+            Spacer()
+            
+            if entry.focusData.streakDays > 0 {
+                VStack {
+                    Image(systemName: "flame.fill")
+                        .foregroundColor(.orange)
+                    Text("\(entry.focusData.streakDays)")
+                        .font(.system(size: 10, weight: .bold))
+                }
+            }
+        }
+    }
+    
+    // MARK: - Inline Widget
+    
+    var inlineWidget: some View {
+        if entry.timerState.isRunning {
+            Text("⏱ \(entry.timerState.formattedTime) - \(entry.timerState.modeName)")
+        } else {
+            Text("⏱ \(entry.focusData.sessionsToday) sessions • \(entry.focusData.formattedFocusTime) focused")
+        }
+    }
+}
+
+// MARK: - Helper Views
+
+struct StatRow: View {
+    let icon: String
+    let iconColor: Color
+    let title: String
+    let subtitle: String
+    
+    var body: some View {
+        HStack(spacing: 6) {
+            Image(systemName: icon)
+                .font(.caption)
+                .foregroundColor(iconColor)
+                .frame(width: 16)
+            
+            VStack(alignment: .leading, spacing: 0) {
+                Text(title)
+                    .font(.caption)
+                    .fontWeight(.medium)
+                Text(subtitle)
+                    .font(.system(size: 9))
+                    .foregroundColor(.secondary)
+            }
+        }
     }
 }
 

@@ -306,4 +306,21 @@ class TimerManager: ObservableObject {
         // Use FocusModeType computed property directly
         return mode.workDuration
     }
+    
+    // MARK: - Widget Data Sync
+    
+    func syncWidgetData() {
+        WidgetDataManager.shared.syncFromManagers()
+    }
+    
+    func updateWidgetTimerState(isRunning: Bool) {
+        WidgetDataManager.shared.updateTimerState(
+            isRunning: isRunning,
+            modeName: currentModeName,
+            timeRemaining: remainingSeconds,
+            totalDuration: totalSecondsForPhase,
+            projectName: projectManager.activeProject?.name ?? "General",
+            sessionsCompleted: dataManager.statistics.todaySessions
+        )
+    }
 }

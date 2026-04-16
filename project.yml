@@ -25,6 +25,7 @@ targets:
       base:
         INFOPLIST_FILE: FocusTimer/Info.plist
         PRODUCT_BUNDLE_IDENTIFIER: com.ggsheng.FocusTimer
+        CODE_SIGN_ENTITLEMENTS: FocusTimer/FocusTimer.entitlements
         CODE_SIGN_STYLE: Automatic
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
@@ -51,6 +52,7 @@ targets:
       base:
         INFOPLIST_FILE: FocusTimerWidget/Info.plist
         PRODUCT_BUNDLE_IDENTIFIER: com.ggsheng.FocusTimer.widget
+        CODE_SIGN_ENTITLEMENTS: FocusTimerWidget/FocusTimerWidget.entitlements
         CODE_SIGN_STYLE: Automatic
         SKIP_INSTALL: true
         SWIFT_EMIT_LOC_STRINGS: true
