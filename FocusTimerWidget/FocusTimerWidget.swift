@@ -5,6 +5,7 @@
 
 import WidgetKit
 import SwiftUI
+import ActivityKit
 
 @main
 struct FocusTimerWidgetBundle: WidgetBundle {
