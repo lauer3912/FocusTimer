@@ -500,6 +500,8 @@ struct FocusTimerLiveActivity: Widget {
             } compactTrailing: {
                 Text("\(context.state.timeRemaining / 60)m")
                     .font(.caption)
+            } minimal: {
+                Image(systemName: "timer")
             }
         }
     }
