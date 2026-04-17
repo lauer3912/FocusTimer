@@ -21,6 +21,7 @@ targets:
       - path: FocusTimer
         excludes:
           - "**/.DS_Store"
+          - "**/Info.plist"
     settings:
       base:
         INFOPLIST_FILE: FocusTimer/Info.plist
@@ -48,6 +49,7 @@ targets:
       - path: FocusTimerWidget
         excludes:
           - "**/.DS_Store"
+          - "**/Info.plist"
     settings:
       base:
         INFOPLIST_FILE: FocusTimerWidget/Info.plist
