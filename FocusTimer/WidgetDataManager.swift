@@ -147,20 +147,20 @@ class WidgetDataManager {
     // MARK: - Quick Update from Managers
     
     func syncFromManagers() {
-        let stats = FocusDataManager.shared.getTodayStats()
+        let stats = FocusDataManager.shared.statistics
         let leveling = LevelingSystem.shared
         let coins = FocusCoinManager.shared
         let achievements = AchievementManager.shared
         
         updateFocusData(
-            sessionsToday: stats.sessionsCompleted,
+            sessionsToday: stats.todaySessions,
             streakDays: stats.currentStreak,
             focusScore: calculateFocusScore(from: stats),
-            todayFocusMinutes: stats.totalFocusMinutes,
+            todayFocusMinutes: stats.todayMinutes,
             currentStreak: stats.currentStreak,
             longestStreak: stats.longestStreak,
             level: leveling.currentLevel,
-            coins: coins.totalCoins,
+            coins: coins.totalEarned - coins.totalSpent,
             achievementsUnlocked: achievements.totalUnlocked,
             totalAchievements: achievements.badges.count
         )
@@ -168,9 +168,9 @@ class WidgetDataManager {
     
     private func calculateFocusScore(from stats: FocusStatistics) -> Int {
         // Simple focus score calculation
-        let sessionScore = min(stats.sessionsCompleted * 10, 40)
+        let sessionScore = min(stats.todaySessions * 10, 40)
         let streakScore = min(stats.currentStreak * 5, 30)
-        let timeScore = min(stats.totalFocusMinutes / 5, 30)
+        let timeScore = min(stats.todayMinutes / 5, 30)
         return min(sessionScore + streakScore + timeScore, 100)
     }
 }
