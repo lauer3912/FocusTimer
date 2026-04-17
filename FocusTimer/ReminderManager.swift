@@ -1,6 +1,6 @@
 //
 //  ReminderManager.swift
-//  FocusTimer
+//  JustZen
 //
 
 import Foundation

@@ -1,6 +1,6 @@
 //
 //  MilestoneCelebrations.swift
-//  FocusTimer
+//  JustZen
 //
 
 import SwiftUI

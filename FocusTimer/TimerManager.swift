@@ -1,6 +1,6 @@
 //
 //  TimerManager.swift
-//  FocusTimer
+//  JustZen
 //
 //  Global timer state manager for cross-component access
 //

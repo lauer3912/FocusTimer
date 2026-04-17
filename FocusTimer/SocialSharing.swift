@@ -1,6 +1,6 @@
 //
 //  SocialSharing.swift
-//  FocusTimer
+//  JustZen
 //
 
 import SwiftUI
@@ -59,7 +59,7 @@ struct SocialSharingCardGenerator {
                 .font: titleFont,
                 .foregroundColor: UIColor.white.withAlphaComponent(0.8)
             ]
-            let title = "FocusTimer"
+            let title = "JustZen"
             title.draw(at: CGPoint(x: 20, y: 20), withAttributes: titleAttrs)
             
             // Main title
@@ -187,7 +187,7 @@ struct SocialSharingCardGenerator {
                 .font: brandFont,
                 .foregroundColor: UIColor(Color(hex: theme.secondaryTextColor))
             ]
-            let brand = "Made with FocusTimer"
+            let brand = "Made with JustZen"
             brand.draw(at: CGPoint(x: width - 120, y: height - 30), withAttributes: brandAttrs)
         }
     }

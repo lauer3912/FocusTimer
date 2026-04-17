@@ -1,6 +1,6 @@
 //
 //  HistoryView.swift
-//  FocusTimer
+//  JustZen
 //
 
 import SwiftUI

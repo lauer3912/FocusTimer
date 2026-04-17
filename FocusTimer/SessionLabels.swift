@@ -1,6 +1,6 @@
 //
 //  SessionLabels.swift
-//  FocusTimer
+//  JustZen
 //
 
 import Foundation

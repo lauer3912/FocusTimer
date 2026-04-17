@@ -1,6 +1,6 @@
 //
 //  FocusDebrief.swift
-//  FocusTimer
+//  JustZen
 //
 //  F97: Focus Debrief - End-of-day reflection
 //  F41: Monthly Focus Calendar Export
@@ -130,13 +130,13 @@ class DebriefManager: ObservableObject {
         return csv
     }
     
-    func exportToPDF(title: String = "FocusTimer Debrief") -> Data? {
+    func exportToPDF(title: String = "JustZen Debrief") -> Data? {
         let pageWidth: CGFloat = 612
         let pageHeight: CGFloat = 792
         let margin: CGFloat = 50
         
         let pdfMetaData = [
-            kCGPDFContextCreator: "FocusTimer",
+            kCGPDFContextCreator: "JustZen",
             kCGPDFContextTitle: title
         ]
         

@@ -1,6 +1,6 @@
 //
 //  IntelligenceDashboard.swift
-//  FocusTimer
+//  JustZen
 //
 
 import SwiftUI

@@ -1,6 +1,6 @@
 //
 //  AppleDesignTheme.swift
-//  FocusTimer
+//  JustZen
 //
 //  Apple Design System implementation based on Human Interface Guidelines
 //

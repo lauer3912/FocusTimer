@@ -1,6 +1,6 @@
 //
 //  TimerAnimationStyles.swift
-//  FocusTimer
+//  JustZen
 //
 //  F48: Multiple timer animation styles - circular, pixel, minimal, zen garden
 

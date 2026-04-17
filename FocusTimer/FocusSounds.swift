@@ -1,6 +1,6 @@
 //
 //  FocusSounds.swift
-//  FocusTimer
+//  JustZen
 //
 
 import Foundation

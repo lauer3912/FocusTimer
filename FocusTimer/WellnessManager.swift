@@ -1,6 +1,6 @@
 //
 //  WellnessManager.swift
-//  FocusTimer
+//  JustZen
 //
 //  F63: Screen-Free Break Mode
 //  F66: Mental Load Manager

@@ -1,6 +1,6 @@
 //
 //  TimerStackManager.swift
-//  FocusTimer
+//  JustZen
 //
 
 import Foundation

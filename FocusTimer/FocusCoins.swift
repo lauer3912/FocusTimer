@@ -1,6 +1,6 @@
 //
 //  FocusCoins.swift
-//  FocusTimer
+//  JustZen
 //
 
 import Foundation

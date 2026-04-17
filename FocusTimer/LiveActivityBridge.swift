@@ -1,6 +1,6 @@
 //
 //  LiveActivityBridge.swift
-//  FocusTimer
+//  JustZen
 //
 
 import ActivityKit

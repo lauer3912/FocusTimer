@@ -1,6 +1,6 @@
 //
 //  DailyPlannerView.swift
-//  FocusTimer
+//  JustZen
 //
 
 import SwiftUI

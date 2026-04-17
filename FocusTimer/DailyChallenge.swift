@@ -1,6 +1,6 @@
 //
 //  DailyChallenge.swift
-//  FocusTimer
+//  JustZen
 //
 
 import Foundation

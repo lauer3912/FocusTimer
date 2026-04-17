@@ -1,6 +1,6 @@
 //
 //  DailyPlanner.swift
-//  FocusTimer
+//  JustZen
 //
 //  Daily Focus Planner - plan your day's focus sessions
 //

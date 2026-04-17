@@ -1,12 +1,12 @@
 //
-//  FocusTimerApp.swift
-//  FocusTimer
+//  JustZenApp.swift
+//  JustZen
 //
 
 import SwiftUI
 
 @main
-struct FocusTimerApp: App {
+struct JustZenApp: App {
     init() {
         // Initialize all managers at app startup
         _ = FocusDataManager.shared

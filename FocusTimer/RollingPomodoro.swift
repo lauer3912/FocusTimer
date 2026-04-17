@@ -1,6 +1,6 @@
 //
 //  RollingPomodoro.swift
-//  FocusTimer
+//  JustZen
 //
 //  Rolling Pomodoro - continuous timer with micro-breaks
 //

@@ -1,6 +1,6 @@
 //
 //  Achievement.swift
-//  FocusTimer
+//  JustZen
 //
 
 import Foundation

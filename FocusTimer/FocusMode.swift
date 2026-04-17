@@ -1,6 +1,6 @@
 //
 //  FocusMode.swift
-//  FocusTimer
+//  JustZen
 //
 
 import Foundation

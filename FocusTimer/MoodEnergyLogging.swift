@@ -1,6 +1,6 @@
 //
 //  MoodEnergyLogging.swift
-//  FocusTimer
+//  JustZen
 //
 //  F53: Mood + Energy Logging before sessions
 

@@ -1,6 +1,6 @@
 //
 //  ShortcutsIntegration.swift
-//  FocusTimer
+//  JustZen
 //
 
 import Foundation
@@ -12,7 +12,7 @@ import AppIntents
 @available(iOS 16.0, *)
 struct StartFocusSessionIntent: AppIntent {
     static var title: LocalizedStringResource = "Start Focus Session"
-    static var description = IntentDescription("Start a new focus session with FocusTimer")
+    static var description = IntentDescription("Start a new focus session with JustZen")
     
     @Parameter(title: "Mode")
     var mode: String?
@@ -68,7 +68,7 @@ struct GetFocusStatsIntent: AppIntent {
 // MARK: - App Shortcuts Provider
 
 @available(iOS 16.0, *)
-struct FocusTimerShortcuts: AppShortcutsProvider {
+struct JustZenShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         AppShortcut(
             intent: StartFocusSessionIntent(),

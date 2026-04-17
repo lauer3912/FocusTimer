@@ -1,6 +1,6 @@
 //
 //  MoodPickerView.swift
-//  FocusTimer
+//  JustZen
 //
 //  Pre-session mood and energy picker
 

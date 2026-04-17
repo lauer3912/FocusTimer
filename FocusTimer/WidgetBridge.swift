@@ -1,6 +1,6 @@
 //
 //  WidgetBridge.swift
-//  FocusTimer
+//  JustZen
 //
 //  This file provides shared data structures for WidgetKit.
 //  Note: A proper Widget Extension target needs to be created in Xcode
@@ -217,7 +217,7 @@ struct LargeWidgetView: View {
             HStack {
                 Image(systemName: "brain.head.profile")
                     .foregroundColor(.pink)
-                Text("FocusTimer")
+                Text("JustZen")
                     .font(.headline)
                 Spacer()
                 
@@ -391,7 +391,7 @@ struct FocusTimerWidget: Widget {
         StaticConfiguration(kind: kind, provider: FocusWidgetProvider()) { entry in
             FocusTimerWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("FocusTimer")
+        .configurationDisplayName("JustZen")
         .description("Track your daily focus progress.")
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }

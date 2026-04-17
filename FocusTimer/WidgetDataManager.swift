@@ -1,6 +1,6 @@
 //
 //  WidgetDataManager.swift
-//  FocusTimer
+//  JustZen
 //
 //  Shared data manager for Widget and App communication via App Groups
 //
@@ -10,7 +10,7 @@ import WidgetKit
 
 // MARK: - App Group Suite Name
 
-let appGroupSuiteName = "group.com.ggsheng.FocusTimer"
+let appGroupSuiteName = "group.com.justzen.JustZen"
 
 // MARK: - Widget Data Keys
 

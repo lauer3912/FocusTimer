@@ -1,6 +1,6 @@
 //
 //  CalendarIntegration.swift
-//  FocusTimer
+//  JustZen
 //
 
 import Foundation
@@ -132,7 +132,7 @@ class CalendarIntegration: ObservableObject {
         event.startDate = startTime
         event.endDate = endTime
         event.calendar = eventStore.defaultCalendarForNewEvents
-        event.notes = "Created by FocusTimer"
+        event.notes = "Created by JustZen"
         event.isAllDay = false
         
         // Add alert 5 minutes before

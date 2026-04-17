@@ -1,6 +1,6 @@
 //
 //  ThemeManager.swift
-//  FocusTimer
+//  JustZen
 //
 
 import Foundation

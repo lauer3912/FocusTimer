@@ -1,6 +1,6 @@
 //
 //  StreakHeatmap.swift
-//  FocusTimer
+//  JustZen
 //
 
 import SwiftUI
@@ -185,7 +185,7 @@ struct SocialSharingCard: View {
                 )
                 
                 VStack(spacing: 8) {
-                    Text("FocusTimer")
+                    Text("JustZen")
                         .font(.system(size: 14, weight: .medium))
                         .foregroundColor(.white.opacity(0.8))
                     

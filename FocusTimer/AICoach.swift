@@ -1,6 +1,6 @@
 //
 //  AICoach.swift
-//  FocusTimer
+//  JustZen
 //
 
 import Foundation

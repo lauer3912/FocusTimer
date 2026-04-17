@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  FocusTimer
+//  JustZen
 //
 
 import SwiftUI

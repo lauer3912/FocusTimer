@@ -1,6 +1,6 @@
 //
-//  FocusTimerWidget.swift
-//  FocusTimerWidget
+//  JustZenWidget.swift
+//  JustZenWidget
 //
 
 import WidgetKit
@@ -31,7 +31,7 @@ struct FocusTimerWidget: Widget {
 
 // MARK: - App Group Suite Name
 
-let widgetAppGroupSuiteName = "group.com.ggsheng.FocusTimer"
+let widgetAppGroupSuiteName = "group.com.justzen.JustZen"
 
 // MARK: - Timeline Provider
 

@@ -1,6 +1,6 @@
 //
 //  FocusDataManager.swift
-//  FocusTimer
+//  JustZen
 //
 
 import Foundation

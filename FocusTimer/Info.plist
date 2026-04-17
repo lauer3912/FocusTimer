@@ -5,7 +5,7 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDisplayName</key>
-    <string>FocusTimer</string>
+    <string>JustZen</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
@@ -54,19 +54,19 @@
     
     <!-- HealthKit -->
     <key>NSHealthShareUsageDescription</key>
-    <string>FocusTimer 需要读取健康数据来分析您专注时的心率变化，帮助您了解最佳专注状态。</string>
+    <string>JustZen 需要读取健康数据来分析您专注时的心率变化，帮助您了解最佳专注状态。</string>
     <key>NSHealthUpdateUsageDescription</key>
-    <string>FocusTimer 需要记录专注活动到健康应用，帮助您追踪专注与健康的关联。</string>
+    <string>JustZen 需要记录专注活动到健康应用，帮助您追踪专注与健康的关联。</string>
     
     <!-- Calendar -->
     <key>NSCalendarsUsageDescription</key>
-    <string>FocusTimer 需要访问日历来查看您的日程安排，并在空闲时段提醒您开始专注。</string>
+    <string>JustZen 需要访问日历来查看您的日程安排，并在空闲时段提醒您开始专注。</string>
     <key>NSCalendarsFullAccessUsageDescription</key>
-    <string>FocusTimer 需要完整的日历访问权限来查看日程并避免在会议时段打扰您。</string>
+    <string>JustZen 需要完整的日历访问权限来查看日程并避免在会议时段打扰您。</string>
     
     <!-- Notifications -->
     <key>NSUserNotificationsUsageDescription</key>
-    <string>FocusTimer 需要发送通知来提醒您专注时段开始和结束。</string>
+    <string>JustZen 需要发送通知来提醒您专注时段开始和结束。</string>
     
     <!-- Siri -->
     <key>NSSiriUsageDescription</key>

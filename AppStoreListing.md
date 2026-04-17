@@ -1,10 +1,10 @@
-# FocusTimer - App Store 上架材料
+# JustZen - App Store 上架材料
 
 ## 📱 App 基本信息
 
-- **App 名称:** FocusTimer
-- **Bundle ID:** com.ggsheng.FocusTimer
-- **Widget Bundle ID:** com.ggsheng.FocusTimer.widget
+- **App 名称:** JustZen
+- **Bundle ID:** com.ggsheng.JustZen
+- **Widget Bundle ID:** com.ggsheng.JustZen.widget
 - **版本:** 1.0
 - **价格:** 免费（可内购）
 
@@ -13,9 +13,9 @@
 ## 📝 App Store 描述 (Description)
 
 ```
-FocusTimer - 专注力训练与时间管理神器
+JustZen - 专注力训练与时间管理神器
 
-告别分心，掌控时间。FocusTimer 是一款专为追求深度工作的你设计的专注力训练工具。
+告别分心，掌控时间。JustZen 是一款专为追求深度工作的你设计的专注力训练工具。
 
 🌟 核心功能
 
@@ -39,7 +39,7 @@ FocusTimer - 专注力训练与时间管理神器
 • 自由职业者 - 管理自由时间
 • 任何人 - 想要减少手机使用、提升专注力
 
-下载 FocusTimer，开始你的专注力训练之旅。
+下载 JustZen，开始你的专注力训练之旅。
 ```
 
 **字符数:** ~800 字（苹果建议 170-4000）

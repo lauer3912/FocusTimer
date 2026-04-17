@@ -1,6 +1,6 @@
 //
 //  StatisticsView.swift
-//  FocusTimer
+//  JustZen
 //
 
 import SwiftUI

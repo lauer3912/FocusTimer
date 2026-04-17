@@ -1,6 +1,6 @@
 //
 //  HealthIntegration.swift
-//  FocusTimer
+//  JustZen
 //
 
 import Foundation
@@ -102,7 +102,7 @@ class HealthIntegration: ObservableObject {
             totalEnergyBurned: nil,
             totalDistance: nil,
             metadata: [
-                HKMetadataKeyWorkoutBrandName: "FocusTimer",
+                HKMetadataKeyWorkoutBrandName: "JustZen",
                 "FocusMinutes": minutes
             ]
         )
