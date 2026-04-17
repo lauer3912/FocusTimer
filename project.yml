@@ -1,4 +1,4 @@
-name: JustZenGo
+name: FocusTimer
 options:
   bundleIdPrefix: com.ggsheng
   deploymentTarget:
@@ -25,7 +25,7 @@ targets:
     settings:
       base:
         INFOPLIST_FILE: JustZenGo/Info.plist
-        PRODUCT_BUNDLE_IDENTIFIER: com.ggsheng.JustZenGoGo
+        PRODUCT_BUNDLE_IDENTIFIER: com.ggsheng.JustZenGo
         CODE_SIGN_ENTITLEMENTS: JustZenGo/JustZenGo.entitlements
         CODE_SIGN_STYLE: Automatic
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
@@ -35,26 +35,26 @@ targets:
         SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD: false
         LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks"
     dependencies:
-      - target: JustZenGoGoWidget
+      - target: JustZenGoWidget
         embed: true
         codeSign: true
         buildPhase:
           copyFiles:
             destination: plugins
 
-  JustZenGoGoWidget:
+  JustZenGoWidget:
     type: app-extension
     platform: iOS
     sources:
-      - path: JustZenGoGoWidget
+      - path: JustZenGoWidget
         excludes:
           - "**/.DS_Store"
           - "**/Info.plist"
     settings:
       base:
-        INFOPLIST_FILE: JustZenGoGoWidget/Info.plist
-        PRODUCT_BUNDLE_IDENTIFIER: com.ggsheng.JustZenGoGo.widget
-        CODE_SIGN_ENTITLEMENTS: JustZenGoGoWidget/JustZenGoGoWidget.entitlements
+        INFOPLIST_FILE: JustZenGoWidget/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.ggsheng.JustZenGo.widget
+        CODE_SIGN_ENTITLEMENTS: JustZenGoWidget/JustZenGoWidget.entitlements
         CODE_SIGN_STYLE: Automatic
         SKIP_INSTALL: true
         SWIFT_EMIT_LOC_STRINGS: true
