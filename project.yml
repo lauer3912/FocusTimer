@@ -1,4 +1,4 @@
-name: JustZen
+name: FocusTimer
 options:
   bundleIdPrefix: com.ggsheng
   deploymentTarget:
