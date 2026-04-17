@@ -431,6 +431,10 @@ extension FocusModeType {
             return AppleDesign.Colors.focusGreen
         case .miniSprint:
             return AppleDesign.Colors.focusOrange
+        case .marathon:
+            return AppleDesign.Colors.focusBlue
+        case .custom:
+            return AppleDesign.Colors.focusYellow
         }
     }
     
@@ -444,6 +448,10 @@ extension FocusModeType {
             return LinearGradient(colors: [AppleDesign.Colors.focusGreen, AppleDesign.Colors.focusMint], startPoint: .topLeading, endPoint: .bottomTrailing)
         case .miniSprint:
             return LinearGradient(colors: [AppleDesign.Colors.focusOrange, AppleDesign.Colors.focusYellow], startPoint: .topLeading, endPoint: .bottomTrailing)
+        case .marathon:
+            return LinearGradient(colors: [AppleDesign.Colors.focusBlue, AppleDesign.Colors.focusPurple], startPoint: .topLeading, endPoint: .bottomTrailing)
+        case .custom:
+            return LinearGradient(colors: [AppleDesign.Colors.focusYellow, AppleDesign.Colors.focusOrange], startPoint: .topLeading, endPoint: .bottomTrailing)
         }
     }
 }

@@ -425,12 +425,12 @@ struct ContentView: View {
                     .frame(width: 88, height: 88)
                     .background(phaseColor)
                     .clipShape(Circle())
-                    .appleShadow(AppleDesign.Shadow(card: AppleDesign.ShadowStyle(
+                    .appleShadow(AppleDesign.ShadowStyle(
                         color: phaseColor.opacity(0.3),
                         radius: 20,
                         x: 0,
                         y: 10
-                    )))
+                    ))
             }
             .buttonStyle(.plain)
             
