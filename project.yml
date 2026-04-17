@@ -1,4 +1,4 @@
-name: FocusTimer
+name: JustZenGo
 options:
   bundleIdPrefix: com.ggsheng
   deploymentTarget:
@@ -14,19 +14,19 @@ settings:
     ENABLE_USER_SCRIPT_SANDBOXING: false
 
 targets:
-  FocusTimer:
+  JustZenGo:
     type: application
     platform: iOS
     sources:
-      - path: FocusTimer
+      - path: JustZenGo
         excludes:
           - "**/.DS_Store"
           - "**/Info.plist"
     settings:
       base:
-        INFOPLIST_FILE: FocusTimer/Info.plist
-        PRODUCT_BUNDLE_IDENTIFIER: com.ggsheng.JustZen
-        CODE_SIGN_ENTITLEMENTS: FocusTimer/FocusTimer.entitlements
+        INFOPLIST_FILE: JustZenGo/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.ggsheng.JustZenGoGo
+        CODE_SIGN_ENTITLEMENTS: JustZenGo/JustZenGo.entitlements
         CODE_SIGN_STYLE: Automatic
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
@@ -35,26 +35,26 @@ targets:
         SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD: false
         LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks"
     dependencies:
-      - target: FocusTimerWidget
+      - target: JustZenGoGoWidget
         embed: true
         codeSign: true
         buildPhase:
           copyFiles:
             destination: plugins
 
-  FocusTimerWidget:
+  JustZenGoGoWidget:
     type: app-extension
     platform: iOS
     sources:
-      - path: FocusTimerWidget
+      - path: JustZenGoGoWidget
         excludes:
           - "**/.DS_Store"
           - "**/Info.plist"
     settings:
       base:
-        INFOPLIST_FILE: FocusTimerWidget/Info.plist
-        PRODUCT_BUNDLE_IDENTIFIER: com.ggsheng.JustZen.widget
-        CODE_SIGN_ENTITLEMENTS: FocusTimerWidget/FocusTimerWidget.entitlements
+        INFOPLIST_FILE: JustZenGoGoWidget/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.ggsheng.JustZenGoGo.widget
+        CODE_SIGN_ENTITLEMENTS: JustZenGoGoWidget/JustZenGoGoWidget.entitlements
         CODE_SIGN_STYLE: Automatic
         SKIP_INSTALL: true
         SWIFT_EMIT_LOC_STRINGS: true
